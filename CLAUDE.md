@@ -37,6 +37,18 @@ video/     HyperFrames
 - Commits no seu branch com prefixo `[FEAT]`, `[FIX]`, `[TEST]`, `[DOC]`, `[CHORE]`.
 - Ao terminar, acrescente uma seção datada em `docs/ALTERACOES_AGENTES.md`: agente, arquivos criados, decisões tomadas, pendências.
 
+## Economia de tokens (vale para todos os agentes e para o orquestrador)
+
+O limite de uso do plano é compartilhado entre todas as sessões e agentes. Trabalhe enxuto:
+
+- **Leia só o necessário:** a sua seção do `docs/CONTRATO_API.md` e os arquivos que vai mudar. Nada de ler `docs/CONTEXTO_PROJETO_ORIGINAL.md` inteiro, nem `docs/ALTERACOES_AGENTES.md` inteiro (só acrescente no fim).
+- **Procure antes de abrir:** use busca (grep/glob) para achar a classe ou método; abra só o trecho que precisa (offset/limit). Não releia um arquivo que você acabou de escrever.
+- **Saída de comando curta:** testes com `mvnw.cmd -q test`; se falhar, mostre só o fim (`... 2>&1 | Select-Object -Last 60` no PowerShell ou `| tail -60`). Nunca despeje logs inteiros, `node_modules`, `target/` ou arquivos gerados.
+- **Rode só os testes do seu módulo** enquanto desenvolve (`-Dtest='br.com.smartvan.<modulo>.**'`); a suíte inteira uma vez no fim.
+- **Sem screenshots nem imagens**, a não ser que a tarefa peça explicitamente.
+- **Relatório final curto:** no máximo 15 linhas. Detalhes vão para `docs/ALTERACOES_AGENTES.md` (no máximo 20 linhas por seção).
+- **Não explore o repositório "para conhecer".** O `CLAUDE.md`, a sua seção do contrato e o seu briefing bastam.
+
 ## Proibido
 
 - Dockerfile, docker-compose, manifests Kubernetes, Helm, CI (decisão Q6 — o Marcus vai escrever).

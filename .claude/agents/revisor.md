@@ -22,10 +22,10 @@ seu trabalho é achar o que está errado e provar. Responda em português.
    - segredo commitado, chamada real ao Google em teste, `@Disabled`;
    - Dockerfile/compose/Kubernetes/CI no repo (proibidos pela decisão Q6);
    - divergências de nome de campo/rota/código HTTP entre código e contrato (o app depende disso).
-4. Suba a aplicação em perfil `test`+`dev` se der (H2) e faça 3 chamadas reais de ponta a ponta com curl: login da Ana,
-   busca de motoristas, proposta. Anote o que vier diferente do contrato.
+4. Economia: não leia arquivos inteiros sem necessidade — use busca para achar cada regra/código de erro e abra só o
+   trecho. Não suba a aplicação nem faça chamadas com curl (os testes de integração já cobrem isso).
 
 ## Entrega
-Escreva `docs/REVISAO_BACKEND.md` com: resultado dos testes, a tabela de cobertura, e os achados em ordem de gravidade
+Escreva `docs/REVISAO_BACKEND.md` (no máximo ~120 linhas) com: resultado dos testes, a tabela de cobertura, e os achados em ordem de gravidade
 (cada um com arquivo:linha, o que acontece, como reproduzir e qual regra quebra). Não altere código. Relatório final ao
 orquestrador: contagem de achados por gravidade e os 5 mais graves em uma linha cada.
