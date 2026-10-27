@@ -130,3 +130,11 @@ pendência por `MensalidadeConsultaService`.
 - Testes: 54 no módulo (integração com `TesteIntegracaoBase`, parsing do Google com `MockRestServiceServer`; nada chama o Google).
 - Sem migration nova. Sem mudanças em model/repositorio/comum.
 - Pendência: nenhuma conhecida; suíte completa deve ser rodada pelo orquestrador após o merge.
+
+## Orquestrador — integração e revisão (2026-10-27)
+- Merge em main: contratacao, mensalidades, cancelamento, rota. 158 testes, 0 falhas.
+- Cancelamento passou a usar `ContratoResponse`/`ContratoMapper` e `MensalidadeConsultaService`.
+- Revisor: 0 graves, 6 médios, 5 baixos. Corrigido: `CancelamentoJob` isola falha por contrato.
+- Pendências (médios): reaproveitamento de rota ignora `horarioSaida`/`veiculoId` (RotaService:104); vagas sem lock (ContratacaoService:125,156); filtros de mensalidade em memória (MensalidadeService:119); N+1 em rota (RotaBuscaRepository) e na busca de motoristas (ContratacaoService:91).
+- Pendências (baixas): validar `dia-vencimento` ≤ 28; aceite desfaz se gerar mensalidade falhar; `LocalTime` passa da meia-noite; `Instant.now()` no GoogleMapsProvider; mais testes 403 no cancelamento.
+- Pendentes de etapa: `docs/diagramas/*.puml` e `docs/openapi.yaml` (para a sessão da nuvem).
