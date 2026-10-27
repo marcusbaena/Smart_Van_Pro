@@ -58,3 +58,12 @@ Branch `back/base`. `./mvnw test` verde (41 testes, nenhum `@Disabled`).
 
 **Pendências**
 - Nenhuma de escopo. Observação: o seed nunca foi rodado contra PostgreSQL real (só H2).
+
+## 2026-10-27 — backend-rota (back/rota)
+- Criado `br.com.smartvan.rota`: `controller` (Falta, Rota), `dto`, `repository` (consultas próprias), `service` (FaltaService, RotaService), `maps` (GoogleMapsProvider, GoogleMapsConfig, OrdenadorPorProximidade).
+- Endpoints: `POST/GET/DELETE /alunos/{id}/faltas`, `POST /motorista/rotas/gerar`, `GET /motorista/rotas`, `GET /motorista/rotas/{id}`.
+- Plano B: qualquer exceção do `MapsProvider.otimizarRota` -> vizinho mais próximo (haversine), `otimizada=false`, distância x1,3, 25 km/h, polyline nula.
+- Google: Routes API (limite de 25 paradas, senão cai no plano B) e Geocoding via RestClient, timeout 5 s; só é registrado com `smartvan.google-maps.api-key` não vazio (variável de ambiente `GOOGLE_MAPS_API_KEY`, conforme o application.yml). Chave nunca é logada.
+- Testes: 54 no módulo (integração com `TesteIntegracaoBase`, parsing do Google com `MockRestServiceServer`; nada chama o Google).
+- Sem migration nova. Sem mudanças em model/repositorio/comum.
+- Pendência: nenhuma conhecida; suíte completa deve ser rodada pelo orquestrador após o merge.
