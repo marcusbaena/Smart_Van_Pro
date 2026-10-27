@@ -32,3 +32,13 @@ Opus coordena, agentes Sonnet escrevem o código. Especificação: `CONTEXTO_PRO
 - **Tabelas novas:** `notificacoes` e `auditorias` (V2).
 - **Seed:** nomes de escolas inventados em endereços reais de São Paulo.
 - **Conta nasce ATIVA** para os dois papéis (decisão em aberto nº 3 do original).
+
+## Mudança de plano em 27/10/2026 (bloqueio de rede)
+
+O Maven Central está bloqueado na rede da sessão na nuvem e o Marcus não encontrou a configuração do ambiente.
+Plano B híbrido, combinado com o Marcus:
+- **Back-end:** orquestrado no Claude Code do computador do Marcus (onde o Maven funciona), com os agentes Sonnet de
+  `.claude/agents/` e o prompt de `docs/PROMPT_ORQUESTRADOR.md`.
+- **App e vídeo:** orquestrados na sessão da nuvem (npm funciona). O app tem um modo mock que segue o contrato até o
+  back-end ficar pronto.
+- A pasta `smart_van_pro` no computador do Marcus é a fonte da verdade; a sessão da nuvem entrega o app lá por commit.
