@@ -12,7 +12,7 @@ create table enderecos (
     complemento  varchar(100),
     bairro       varchar(100) not null,
     cidade       varchar(100) not null,
-    uf           char(2)      not null,
+    uf           varchar(2)     not null,
     cep          varchar(8)   not null,
     latitude     decimal(10,7),
     longitude    decimal(10,7)
