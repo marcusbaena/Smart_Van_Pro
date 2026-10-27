@@ -58,3 +58,22 @@ Branch `back/base`. `./mvnw test` verde (41 testes, nenhum `@Disabled`).
 
 **Pendências**
 - Nenhuma de escopo. Observação: o seed nunca foi rodado contra PostgreSQL real (só H2).
+
+## 2026-10-27 — backend-cancelamento (Wave 1b)
+
+**Criado** (`br.com.smartvan.cancelamento`): `controller/CancelamentoController`, `service/CancelamentoService`,
+`service/CancelamentoJob`, `repository/CancelamentoRepository`, `dto/CancelamentoRequest`, `dto/ContratoCanceladoResponse`;
+teste `CancelamentoIntegracaoTest` (13 testes).
+
+**Decisões**
+- `POST /contratos/{id}/cancelamento` devolve **200** com o `Contrato`. Contrato inexistente -> 404.
+- `ContratoCanceladoResponse` espelha o `Contrato` da seção 2 (provisório). Montado num único método privado
+  `CancelamentoService.montarResposta`.
+- Pendência de mensalidade via `CancelamentoRepository.contarPendentesOuAtrasadas`, atrás de um único método privado
+  `existePendenteOuAtrasada` (ponto de troca por `MensalidadeConsultaService`).
+- O job lista ids vencidos (`idsVencidos`) e chama `encerrar(id)` pelo proxy, uma transação por contrato (uma falha não
+  barra os demais). `CancelamentoJob.encerrarVencidos()` é o método público chamado pelos testes.
+- Sem migration nova.
+
+**Pendências / merge**: trocar `ContratoCanceladoResponse` pelo `ContratoResponse` oficial; opcionalmente trocar a consulta de
+pendência por `MensalidadeConsultaService`.
