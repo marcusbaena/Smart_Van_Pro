@@ -84,3 +84,23 @@ Branch `back/base`. `./mvnw test` verde (41 testes, nenhum `@Disabled`).
 `@Transactional` (associações lazy). O bloco `cancelamento` sai preenchido quando `dataSolicitacaoCancelamento != null`.
 
 **Pendências**: nenhuma.
+---
+
+## 2026-10-27 — agente backend-mensalidades (Wave 1b)
+
+**Criados** (`br.com.smartvan.financeiro`): `controller/MensalidadeController`, `service/MensalidadeService`,
+`service/MensalidadeJob`, `service/MensalidadeConsultaService`, `dto/MensalidadeResponse`, `dto/BaixaRequest`,
+`repository/MensalidadeBuscaRepository`; teste `financeiro/MensalidadeIntegracaoTest` (22 testes). Sem migration.
+
+**Decisões**
+- Listener do `ContratoAtivadoEvent` é `@EventListener` + `@Transactional`: participa da transação de quem publica
+  (a mensalidade nasce junto com o aceite) e abre a própria se publicado fora de transação. Idempotente.
+- Vencimento: dia 10 da competência; se hoje > dia 10, hoje + 5 (vale para evento e job; no dia 10 ainda vence no dia 10).
+- Job: `gerarCompetenciaAtual()` gera uma mensalidade por transação (falha de um contrato não derruba os demais);
+  `marcarAtrasadas()` só atua em `PENDENTE`, então a notificação sai uma vez. `executar()` é o `@Scheduled`.
+- `MensalidadeConsultaService` está em `br.com.smartvan.financeiro.service`.
+- Ordem dos erros na baixa: 404, 403, 409, 422. `GET /contratos/{id}/mensalidades`: 404 se contrato inexistente, 403 se não for parte.
+- `competencia` inválida em `/motorista/cobrancas` -> 400 `VALIDACAO`.
+- `AlunoResumo`/`UsuarioResumo` ficaram como records aninhados em `MensalidadeResponse` (ainda não existiam no código comum).
+
+**Pendências:** nenhuma.
