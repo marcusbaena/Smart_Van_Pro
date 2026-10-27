@@ -58,3 +58,29 @@ Branch `back/base`. `./mvnw test` verde (41 testes, nenhum `@Disabled`).
 
 **Pendências**
 - Nenhuma de escopo. Observação: o seed nunca foi rodado contra PostgreSQL real (só H2).
+
+## 2026-10-27 — agente `contratacao` (Wave 1b) — Buscar motorista (UC05) e Contratação (UC06)
+
+**Criado** (`backend/src/main/java/br/com/smartvan/contratacao/`)
+- `controller/ContratacaoController` (7 endpoints da seção 2), `service/ContratacaoService`.
+- `repository/`: `MotoristaBuscaRepository` (JPQL com `statusValidacao = VALIDADO` e filtros na consulta),
+  `ContratoBuscaRepository`, `CapacidadeRepository` (veículos por capacidade, vínculos responsável-aluno).
+- `dto/`: `MotoristaBusca`, `PropostaRequest`, `ContratoResponse`, `ContratoMapper`, `AlunoResumo`, `UsuarioResumo`.
+- Testes: `ContratacaoIntegracaoTest` (um teste por regra e por código de erro, eventos com `@RecordApplicationEvents`).
+
+**Decisões onde o contrato era vago**
+- Ordem das validações da proposta: aluno existe (404) -> aluno é do responsável (403) -> motorista existe (404) ->
+  `MOTORISTA_NAO_VALIDADO` -> `SEM_VAGAS` -> `PROPOSTA_DUPLICADA` -> `ALUNO_JA_TEM_CONTRATO`.
+- Vínculo "aluno do responsável" = `responsaveis_alunos` com `status_vinculo = ATIVO`.
+- `GET /motoristas/{id}` de motorista não VALIDADO ou inexistente -> 404; também exige >= 1 aluno (422 `ALUNO_OBRIGATORIO`).
+- Motorista sem veículo: `veiculo` null, `vagasRestantes` 0 (proposta -> 409 `SEM_VAGAS`).
+- Ao aceitar, além de `SEM_VAGAS`, rechecagem de `ALUNO_JA_TEM_CONTRATO` (aluno ativado por outro motorista entre proposta e aceite).
+- `cidade`/`nome`: `contains` case-insensitive, sem normalizar acento (mesmo critério de `GET /escolas`).
+- `valorMensal` precisa ser > 0, até 2 casas.
+- `ContratoResponse.escola` = escola do aluno; `cancelamento` é `null` (chave presente) quando não há solicitação.
+- Resumos de aluno/usuário ficaram em `contratacao/dto` (`AlunoResumo`, `UsuarioResumo`); `EscolaResumo` é o de `cadastro/dto`.
+
+**Para o agente de cancelamento**: use `ContratoMapper.de(Contrato)` (estático, retorna `ContratoResponse`). Chame dentro de
+`@Transactional` (associações lazy). O bloco `cancelamento` sai preenchido quando `dataSolicitacaoCancelamento != null`.
+
+**Pendências**: nenhuma.
