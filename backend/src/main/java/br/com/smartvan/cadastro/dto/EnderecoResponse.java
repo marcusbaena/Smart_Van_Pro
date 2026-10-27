@@ -1,0 +1,16 @@
+package br.com.smartvan.cadastro.dto;
+
+import br.com.smartvan.model.Endereco;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.math.BigDecimal;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record EnderecoResponse(Long id, String logradouro, String numero, String complemento, String bairro,
+                               String cidade, String uf, String cep, BigDecimal latitude, BigDecimal longitude) {
+
+    public static EnderecoResponse de(Endereco e) {
+        return new EnderecoResponse(e.getId(), e.getLogradouro(), e.getNumero(), e.getComplemento(), e.getBairro(),
+                e.getCidade(), e.getUf(), e.getCep(), e.getLatitude(), e.getLongitude());
+    }
+}
