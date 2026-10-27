@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: smartvan-pro
+  profiles:
+    default: dev
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/smartvan}
+    username: ${DB_USERNAME:smartvan}
+    password: ${DB_PASSWORD:}            # nunca commitar senha (pendência do projeto original)
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate                 # schema vem do Flyway
+  flyway:
+    enabled: true
+  jackson:
+    time-zone: UTC
+
+server:
+  servlet:
+    context-path: /api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true                    # /actuator/health/liveness e /readiness (útil no Kubernetes)
+
+smartvan:
+  jwt:
+    secret: ${JWT_SECRET:}               # obrigatório fora do perfil dev (mín. 32 caracteres)
+    expiracao-horas: 8
+  google-maps:
+    api-key: ${GOOGLE_MAPS_API_KEY:}     # vazio = plano B (proximidade)
+  mensalidade:
+    dia-vencimento: 10
+  agendador:
+    habilitado: true
+    mensalidades:
+      cron: "0 0 6 * * *"
+    cancelamentos:
+      cron: "0 30 6 * * *"
+  cors:
+    origens: ${CORS_ORIGENS:http://localhost:8081,http://localhost:19006}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+smartvan:
+  jwt:
+    secret: ${JWT_SECRET:dev-only-secret-troque-em-producao-0123456789}

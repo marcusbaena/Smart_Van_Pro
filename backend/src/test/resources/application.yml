@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:smartvan;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+
+server:
+  servlet:
+    context-path: /api
+
+smartvan:
+  jwt:
+    secret: test-secret-com-pelo-menos-32-caracteres-123
+    expiracao-horas: 8
+  google-maps:
+    api-key: ""
+  mensalidade:
+    dia-vencimento: 10
+  agendador:
+    habilitado: false
+    mensalidades:
+      cron: "-"
+    cancelamentos:
+      cron: "-"
+  cors:
+    origens: http://localhost:8081

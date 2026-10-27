@@ -1,0 +1,19 @@
+# back-end
+backend/target/
+*.class
+# mobile
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+# skills / ferramentas
+.taste-skill/
+video/node_modules/
+video/renders/
+# sistema
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+*.log
